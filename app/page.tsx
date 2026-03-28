@@ -1,96 +1,115 @@
-// app/page.tsx 全量缝合版
-
 import Image from 'next/image';
-// 假设你昨天定义的 fetch 逻辑在 lib/fetchNews.ts，或者直接写在 page 里
-// 如果是写在 page 里的，请保留你昨天的 async function getNews() 逻辑
-// 下面我预留了数据调用的占位
 
-async function getNewsData() {
-  // 这里是你昨天的逻辑：Fetch RSS -> Gemini Parse -> Return Array
-  // 如果你还没把逻辑抽离到 lib，请确保这个函数能跑通
+// --- 1. 昨天的核心成果：抓取与解析逻辑 ---
+// 注意：这里建议保持为服务端异步函数
+async function getBrewingNews() {
   try {
-    // 示例占位，请替换为你昨天的真实 fetch 代码
-    // const response = await fetch('你的API或RSS源');
-    // return await response.json();
-    return []; // 暂时返回空数组以防报错
-  } catch (e) {
-    console.error("新闻抓取失败", e);
+    // 逻辑：Fetch RSS -> Gemini API 处理
+    // 这里的返回结构需对应你昨天的定义
+    // 如果你昨天的 fetch 逻辑在单独的文件，请 import 它
+    // 下面是模拟数据，确保页面不空洞
+    return [
+      {
+        title: "300L 批次冷端发酵压力曲线解构",
+        summary: "基于 Gemini 的协议分析：在 12°C 下保持 1.2 bar 压力能显著提升不锈钢罐体内的酯类物质稳定性...",
+        source: "Internal Protocol",
+        time: "2h ago"
+      },
+      {
+        title: "河鲜精酿配比算法 v1.2 更新",
+        summary: "针对邻居饭店的清蒸鲈鱼，AI 建议调高萨兹啤酒花的添加比例，以苦味抵消油脂感...",
+        source: "Local Sync",
+        time: "5h ago"
+      },
+      {
+        title: "全球精酿供应：铝罐成本波动预警",
+        summary: "受能源价格影响，欧洲铝罐供应收紧。Gemini 建议转向散装桶装化（Keg）变现路径...",
+        source: "Brewbound",
+        time: "1d ago"
+      }
+    ];
+  } catch (error) {
+    console.error("Data Fetch Error:", error);
     return [];
   }
 }
 
 export default async function Home() {
-  const newsData = await getNewsData();
+  const newsData = await getBrewingNews();
 
   return (
-    <main className="min-h-screen bg-[#0b0b0b] text-gray-100 selection:bg-amber-900">
+    <main className="min-h-screen bg-[#050505] text-gray-100 selection:bg-amber-600 selection:text-black">
       
-      {/* --- HERO SECTION: 注入你的地下室灵魂 --- */}
-      <section className="relative h-[85vh] w-full flex items-center justify-center overflow-hidden border-b border-gray-900">
+      {/* --- HERO SECTION: 解决“黑”的问题，找回银色质感 --- */}
+      <section className="relative h-[85vh] w-full flex items-center justify-center overflow-hidden border-b border-white/5">
+        {/* 背景图：降低灰度，提高透明度，增加缩放感 */}
         <Image
-          src="/hero-bg.jpg" // 确保图片已重命名并放入 public 文件夹
-          alt="地下室发酵罐阵列"
+          src="/hero-bg.jpg"
+          alt="Basement Brewery"
           fill
           priority
-          className="object-cover opacity-30 grayscale hover:grayscale-0 transition-all duration-1000"
+          className="object-cover opacity-50 grayscale-[30%] scale-105 transition-transform duration-1000"
         />
         
-        {/* 渐变遮罩：让底部过渡更自然 */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-transparent to-transparent"></div>
+        {/* 关键修复：遮罩层放在文字下方，且使用渐变而非全黑 */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-[#050505] z-10"></div>
 
-        <div className="relative z-10 text-center px-4">
-          <h1 className="text-6xl md:text-9xl font-black tracking-tighter mb-4 uppercase text-white mix-blend-difference">
-            Craft Brew<br/>Rebound
+        {/* 文字内容：z-20 确保在遮罩之上，彻底告别“灰蒙蒙” */}
+        <div className="relative z-20 text-center px-4">
+          <h1 className="text-6xl md:text-[120px] font-black tracking-tighter leading-none text-white uppercase italic drop-shadow-2xl">
+            CRAFT BREW<br/>
+            <span className="text-amber-600 shadow-amber-900">REBOUND</span>
           </h1>
-          <div className="h-1 w-24 bg-amber-600 mx-auto mb-8"></div>
-          <p className="max-w-xl mx-auto text-base md:text-lg font-light tracking-[0.2em] italic text-gray-400 uppercase">
+          
+          <div className="h-1.5 w-24 bg-amber-600 mx-auto my-8 shadow-[0_0_20px_rgba(217,119,6,0.8)]"></div>
+          
+          <p className="max-w-xl mx-auto text-sm md:text-base tracking-[0.5em] font-light text-gray-300 uppercase opacity-80">
             Logic is Cold. Fermentation is Hot.
           </p>
         </div>
       </section>
 
-      {/* --- CONTENT GRID: 三段式逻辑分布 --- */}
+      {/* --- CONTENT SECTION: 三段式逻辑分布 --- */}
       <section className="max-w-7xl mx-auto py-24 px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
           
-          {/* 01 / 左侧：立场 (占 3 格) */}
-          <div className="lg:col-span-3 space-y-6">
-            <p className="text-amber-700 font-mono text-xs tracking-[0.3em] uppercase">01 / The Compass</p>
-            <h2 className="text-3xl font-bold tracking-tight">立场与审美</h2>
-            <div className="h-px w-12 bg-gray-800"></div>
-            <p className="text-gray-500 text-sm leading-relaxed">
-              在废墟中保持乐观，在代码中酿造自由。追求极致的工程师逻辑，拒绝平庸。
+          {/* 01 / 左栏：立场 (The Compass) */}
+          <div className="lg:col-span-3 sticky top-12 space-y-6">
+            <p className="text-amber-700 font-mono text-[10px] tracking-[0.4em] uppercase">01 / The Compass</p>
+            <h2 className="text-3xl font-bold tracking-tighter border-b border-white/10 pb-4">立场与审美</h2>
+            <p className="text-gray-500 text-sm leading-relaxed font-light">
+              在废墟中保持乐观，在代码中酿造自由。追求极致的工程师逻辑，拒绝中式平庸。
+              <br/><br/>
+              精酿不仅是饮品，更是对抗熵增的实验。
             </p>
-            <div className="pt-4">
-               <button className="text-[10px] border border-gray-800 px-4 py-2 uppercase tracking-widest hover:bg-white hover:text-black transition">
-                 Read Manifesto
-               </button>
-            </div>
           </div>
 
-          {/* 02 / 中间：行业简报 (占 6 格 - 核心数据区) */}
-          <div className="lg:col-span-6 space-y-8">
-            <p className="text-amber-700 font-mono text-xs tracking-[0.3em] uppercase text-center lg:text-left">
+          {/* 02 / 中栏：昨日成果展示 (The Still) */}
+          <div className="lg:col-span-6 space-y-10">
+            <p className="text-amber-700 font-mono text-[10px] tracking-[0.4em] uppercase text-center lg:text-left">
               02 / The Still (Daily Intelligence)
             </p>
             
-            <div className="space-y-12">
+            <div className="space-y-8">
               {newsData.length > 0 ? (
-                newsData.map((item: any, index: number) => (
-                  <article key={index} className="group border-l border-gray-800 pl-6 hover:border-amber-600 transition-colors">
-                    <h3 className="text-xl font-bold group-hover:text-amber-500 transition-colors">{item.title}</h3>
-                    <p className="mt-3 text-gray-500 text-sm leading-relaxed line-clamp-3">
+                newsData.map((item, index) => (
+                  <article key={index} className="group relative p-6 border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition-all">
+                    <div className="absolute left-0 top-0 h-full w-1 bg-amber-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
+                    <h3 className="text-xl font-bold group-hover:text-amber-500 transition-colors leading-tight">
+                      {item.title}
+                    </h3>
+                    <p className="mt-4 text-gray-400 text-sm font-light leading-relaxed">
                       {item.summary}
                     </p>
-                    <div className="mt-4 flex items-center text-[10px] text-gray-600 space-x-4 uppercase tracking-widest">
-                      <span>Source: {item.source || 'Brewbound'}</span>
-                      <span>Confidence: 98%</span>
+                    <div className="mt-6 flex items-center justify-between text-[10px] text-gray-600 uppercase tracking-widest font-mono">
+                      <span>{item.source}</span>
+                      <span>{item.time}</span>
                     </div>
                   </article>
                 ))
               ) : (
-                <div className="py-20 text-center border border-dashed border-gray-900 rounded-lg">
-                  <p className="text-xs text-gray-700 uppercase tracking-widest animate-pulse">
+                <div className="py-20 text-center border border-dashed border-white/10 opacity-30">
+                  <p className="text-xs uppercase tracking-widest animate-pulse font-mono">
                     [ Listening to Global Brewing Protocols... ]
                   </p>
                 </div>
@@ -98,31 +117,32 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* 03 / 右侧：变现业务 (占 3 格) */}
-          <div className="lg:col-span-3 space-y-6">
-            <p className="text-amber-700 font-mono text-xs tracking-[0.3em] uppercase">03 / The Flask</p>
-            <h2 className="text-3xl font-bold tracking-tight">商业闭环</h2>
-            <div className="h-px w-12 bg-gray-800"></div>
-            <ul className="space-y-6">
+          {/* 03 / 右栏：变现入口 (The Flask) */}
+          <div className="lg:col-span-3 sticky top-12 space-y-6 text-right lg:text-left">
+            <p className="text-amber-700 font-mono text-[10px] tracking-[0.4em] uppercase">03 / The Flask</p>
+            <h2 className="text-3xl font-bold tracking-tighter border-b border-white/10 pb-4">商业闭环</h2>
+            <ul className="space-y-8">
               <li className="group cursor-pointer">
-                <span className="text-[10px] text-gray-600 block mb-1">Service A</span>
-                <h4 className="font-bold group-hover:text-amber-500 transition">AI 酿造咨询</h4>
+                <p className="text-[10px] text-gray-600 mb-1 font-mono uppercase tracking-widest">Protocol A</p>
+                <h4 className="text-lg font-bold group-hover:text-amber-500 transition-colors">AI 酿造咨询</h4>
+                <p className="text-xs text-gray-500 mt-1">针对 300L-500L 设备的数字化改造方案</p>
               </li>
               <li className="group cursor-pointer">
-                <span className="text-[10px] text-gray-600 block mb-1">Service B</span>
-                <h4 className="font-bold group-hover:text-amber-500 transition">地下室巡礼 & B端供货</h4>
+                <p className="text-[10px] text-gray-600 mb-1 font-mono uppercase tracking-widest">Protocol B</p>
+                <h4 className="text-lg font-bold group-hover:text-amber-500 transition-colors">河鲜配酒定制</h4>
+                <p className="text-xs text-gray-500 mt-1">B端供货：为饭店提供逻辑支撑的餐酒组合</p>
               </li>
             </ul>
           </div>
-
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="py-20 border-t border-gray-900 bg-[#080808]">
-        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center text-[10px] text-gray-700 tracking-[0.5em] uppercase">
-          <p>© 2026 Craft Brew Rebound</p>
-          <p>Handcrafted in the Basement</p>
+      {/* --- FOOTER --- */}
+      <footer className="py-16 border-t border-white/5 bg-black">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-gray-700 tracking-[0.4em] uppercase font-mono">
+          <p>© 2026 Craft Brew Rebound / Ver 1.0.4</p>
+          <p className="text-amber-900/40 tracking-normal italic">Refining Logic in the Basement</p>
+          <p>Handcrafted by AI Engineering</p>
         </div>
       </footer>
     </main>
